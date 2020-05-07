@@ -5,10 +5,14 @@ deploy:
     manifests:
       - ./infra/k8s/*
 build:
-  local:
-    push: false
+  # local:
+  #   push: false
+  googleCloudBuild:
+    projectId: inlaid-subset-276505
   artifacts:
-    - image: yoshijifujiwara/auth
+    # - image: yoshijifujiwara/auth
+    # asia.gcr.io -> アジアでイメージをホスト
+    - image: asia.gcr.io/inlaid-subset-276505/auth
       context: auth
       docker:
         dockerfile: Dockerfile
