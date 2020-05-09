@@ -14,7 +14,7 @@ import { errorHandler } from "./middleware/error-handler";
 import { NotFoundError } from "./errors";
 
 const app = express();
-app.settings("trust proxy", true); // nginx ingress
+app.set("trust proxy", true); // nginx ingress
 app.use(json());
 app.use(
   cookieSession({
@@ -36,6 +36,10 @@ app.all("*", async (req, res) => {
 app.use(errorHandler);
 
 const start = async () => {
+  if (!process.env.JWT_KEY) {
+    throw new Error("JWT_KEY must be defined");
+  }
+
   try {
     await mongoose.connect("mongodb://auth-mongo-srv:27017/auth", {
       useNewUrlParser: true,
