@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Password } from "../services/password";
+import { Password } from "../services";
 
 interface UserAttrs {
   email: string;

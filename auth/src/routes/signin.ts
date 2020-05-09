@@ -1,7 +1,10 @@
 import express, { Request, Response } from "express";
-import { body, validationResult } from "express-validator";
-import { RequestValidationError } from "../errors";
+import { body } from "express-validator";
 import { validateRequest } from "../middlewares";
+import { User } from "../models";
+import { BadRequestError } from "../errors";
+import { Password } from "../services";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -12,7 +15,38 @@ router.post(
     body("password").trim().notEmpty().withMessage("You must suppy a password"),
   ],
   validateRequest,
-  (req: Request, res: Response) => {}
+  async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
+      throw new BadRequestError("Invalid credentials");
+    }
+
+    const passwordsMatch = await Password.compare(
+      existingUser.password,
+      password
+    );
+    if (!passwordsMatch) {
+      throw new BadRequestError("Invalid Credentials");
+    }
+
+    // Generate JWT
+    const userJwt = jwt.sign(
+      {
+        id: existingUser.id,
+        email: existingUser.email,
+      },
+      process.env.JWT_KEY! // チェックしてるから安心しろの '!'
+    );
+
+    // Store it on session object
+    req.session = {
+      jwt: userJwt,
+    };
+
+    res.status(201).send(existingUser);
+  }
 );
 
 export { router as signinRouter };
