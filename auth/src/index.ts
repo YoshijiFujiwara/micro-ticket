@@ -2,6 +2,7 @@ import express from "express";
 import "express-async-errors";
 import { json } from "body-parser";
 import mongoose from "mongoose";
+import cookieSession from "cookie-session";
 
 import {
   currentUserRouter,
@@ -13,7 +14,14 @@ import { errorHandler } from "./middleware/error-handler";
 import { NotFoundError } from "./errors";
 
 const app = express();
+app.settings("trust proxy", true); // nginx ingress
 app.use(json());
+app.use(
+  cookieSession({
+    signed: false, // JWTをencryptしないように
+    secure: true, // https
+  })
+);
 
 app.use(currentUserRouter);
 app.use(signinRouter);
