@@ -18,7 +18,7 @@ app.use(json());
 app.use(
   cookieSession({
     signed: false, // JWTをencryptしないように
-    secure: true, // https
+    secure: process.env.NODE_ENV !== "test",
   })
 );
 
