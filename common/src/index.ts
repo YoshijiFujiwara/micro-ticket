@@ -1,5 +1,2 @@
-interface Color {
-  red: number;
-  blue: number;
-  green: number;
-}
+export * from "./errors";
+export * from "./middlewares";
