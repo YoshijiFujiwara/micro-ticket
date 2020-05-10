@@ -7,7 +7,11 @@ import {
   NotFoundError,
   currentUser,
 } from "@yoshiji-sgtickets/common";
-import { createTicketRouter } from "./routes";
+import {
+  createTicketRouter,
+  showTicketRouter,
+  indexTicketRouter,
+} from "./routes";
 
 const app = express();
 app.set("trust proxy", true); // nginx ingress
@@ -21,6 +25,8 @@ app.use(
 app.use(currentUser);
 
 app.use(createTicketRouter);
+app.use(showTicketRouter);
+app.use(indexTicketRouter);
 
 // 'express-async-erros'によって動く
 app.all("*", async (req, res) => {
