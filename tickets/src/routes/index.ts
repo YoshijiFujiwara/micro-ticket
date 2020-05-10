@@ -12,3 +12,4 @@ router.get("/api/tickets", async (req: Request, res: Response) => {
 export { router as indexTicketRouter };
 export * from "./new";
 export * from "./show";
+export * from "./update";

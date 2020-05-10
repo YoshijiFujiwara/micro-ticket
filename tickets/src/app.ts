@@ -11,6 +11,7 @@ import {
   createTicketRouter,
   showTicketRouter,
   indexTicketRouter,
+  updateTicketRouter,
 } from "./routes";
 
 const app = express();
@@ -27,6 +28,7 @@ app.use(currentUser);
 app.use(createTicketRouter);
 app.use(showTicketRouter);
 app.use(indexTicketRouter);
+app.use(updateTicketRouter);
 
 // 'express-async-erros'によって動く
 app.all("*", async (req, res) => {
