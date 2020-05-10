@@ -1,30 +1,13 @@
-import axios from "axios";
+import buildClient from "../api/build-client";
 
 const LandingPage = ({ currentUser }) => {
-  console.log(currentUser);
-
-  return <h1>Landing Page</h1>;
+  return currentUser ? <h1>ログインしました</h1> : <h1>ログインしてない</h1>;
 };
 
-LandingPage.getInitialProps = async ({ req }) => {
-  console.log(req.headers);
-  if (typeof window === "undefined") {
-    // on the server
-    // kubectl get service -n ingress-nginx のLoadBalancerの名前を参照
-    // headerを指定しないと動かないの、ちょっと難しいな
-    const { data } = await axios.get(
-      "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser",
-      {
-        headers: req.headers, // ホスト名やcookie情報が含まれるのでOK
-      }
-    );
-    return data;
-  } else {
-    // on the cliente
-    const { data } = await axios.get("/api/users/currentuser");
-    return data;
-  }
-  return {};
+LandingPage.getInitialProps = async (context) => {
+  const client = buildClient(context);
+  const { data } = await client.get("/api/users/currentuser");
+  return data;
 };
 
 export default LandingPage;
