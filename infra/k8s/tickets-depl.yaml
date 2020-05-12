@@ -16,6 +16,14 @@ spec:
         - name: tickets
           image: asia.gcr.io/inlaid-subset-276505/tickets
           env:
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name # podの名前なので、ユニークになるっぽいぞ
+            - name: NATS_URL
+              value: "http://nats-srv:4222"
+            - name: NATS_CLUSTER_ID
+              value: ticketing
             - name: MONGO_URI
               value: "mongodb://tickets-mongo-srv:27017/tickets"
             - name: JWT_KEY
