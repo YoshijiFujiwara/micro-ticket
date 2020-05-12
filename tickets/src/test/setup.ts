@@ -10,6 +10,9 @@ declare global {
   }
 }
 
+// natsラッパーのモック
+jest.mock("../nats-wrapper");
+
 let mongo: any;
 beforeAll(async () => {
   process.env.JWT_KEY = "dummy";
