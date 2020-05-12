@@ -1,7 +1,12 @@
 export const natsWrapper = {
   client: {
-    publish: (subject: string, data: string, callback: () => void) => {
-      callback();
-    },
+    // これは難しいな :thinking_face:
+    publish: jest
+      .fn()
+      .mockImplementation(
+        (subject: string, data: string, callback: () => void) => {
+          callback();
+        }
+      ),
   },
 };
