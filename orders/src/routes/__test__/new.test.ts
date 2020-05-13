@@ -47,6 +47,8 @@ it("reserves a ticekt", async () => {
   await request(app)
     .post("/api/orders")
     .set("Cookie", global.signin())
-    .send({ ticektId: ticket.id })
+    .send({ ticketId: ticket.id })
     .expect(201);
 });
+
+it.todo("emits an order creted event");
