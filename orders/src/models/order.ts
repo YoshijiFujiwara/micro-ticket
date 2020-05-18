@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { OrderStatus } from "@yoshiji-sgtickets/common";
 import { TicketDoc } from "./ticket";
 
@@ -16,6 +17,7 @@ interface OrderDoc extends mongoose.Document {
   status: OrderStatus;
   expiresAt: Date;
   ticket: TicketDoc;
+  version: number;
 }
 
 interface OrderModel extends mongoose.Model<OrderDoc> {
@@ -29,7 +31,7 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
     status: {
-      type: String,
+      type: String, //便利な気がしている
       required: true,
       enum: Object.values(OrderStatus), // 便利だね！上の型のチェックと合わせてやることによって、より強固になる
       default: OrderStatus.Created,
@@ -51,6 +53,9 @@ const orderSchema = new mongoose.Schema(
     },
   }
 );
+
+orderSchema.set("versionKey", "version");
+orderSchema.plugin(updateIfCurrentPlugin);
 
 orderSchema.statics.build = (attrs: OrderAttrs) => {
   return new Order(attrs);
