@@ -1,7 +1,7 @@
-import { Listener } from "./base-listener";
+import { Listener } from "../../../common/src/events/base-listener";
 import { Message } from "node-nats-streaming";
-import { TicketCreatedEvent } from "./ticket-created-event";
-import { Subjects } from "./subjects";
+import { TicketCreatedEvent } from "../../../common/src/events/ticket-created-event";
+import { Subjects } from "../../../common/src/events/subjects";
 
 export class TicketCreatedListener extends Listener<TicketCreatedEvent> {
   // 左側の Subjects.TicketCreated は、finalキーワードに似ている感じ
